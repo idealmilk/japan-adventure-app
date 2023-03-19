@@ -11,12 +11,14 @@ import {
   FieldResolver,
   Root,
   ObjectType,
+  Info,
 } from 'type-graphql';
 import { Post } from '../entities/Post';
 import { MyContext } from '../types';
 import { isAuth } from '../middleware/isAuth';
 import { getConnection } from 'typeorm';
 import { Upvote } from '../entities/Upvote';
+import { tmpdir } from 'os';
 import { User } from '../entities/User';
 
 @InputType()
@@ -56,12 +58,12 @@ export class PostResolver {
       return null;
     }
 
-    const updoot = await upvoteLoader.load({
+    const upvote = await upvoteLoader.load({
       postId: post.id,
       userId: req.session.userId,
     });
 
-    return updoot ? updoot.value : null;
+    return upvote ? upvote.value : null;
   }
 
   @Mutation(() => Boolean)
@@ -141,7 +143,7 @@ export class PostResolver {
 
     const posts = await getConnection().query(
       `
-    select p.*,
+    select p.*
     from post p
     ${cursor ? `where p."createdAt" < $2` : ''}
     order by p."createdAt" DESC
