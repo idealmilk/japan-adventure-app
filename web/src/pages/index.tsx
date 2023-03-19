@@ -34,12 +34,6 @@ const Index = () => {
 
   return (
     <Layout>
-      <Flex align='center'>
-        <Heading>LiReddit</Heading>
-        <NextLink href='/create-post'>
-          <Link ml='auto'>create post</Link>
-        </NextLink>
-      </Flex>
       <br />
       {!data && fetching ? (
         <div>loading...</div>
@@ -49,7 +43,11 @@ const Index = () => {
             <Flex key={p.id} p={5} shadow='md' borderWidth='1px'>
               <UpvoteSection post={p} />
               <Box>
-                <Heading fontSize='xl'>{p.title}</Heading>
+                <NextLink href='/post/[id]' as={`/post/${p.id}`}>
+                  <Link>
+                    <Heading fontSize='xl'>{p.title}</Heading>
+                  </Link>
+                </NextLink>
                 <Text>by {p.creator.username}</Text>
                 <Text mt={4}>{p.textSnippet}</Text>
               </Box>
